@@ -5,6 +5,8 @@ import { format } from 'prettier';
 import jimp from 'jimp';
 import sanitize from 'sanitize-filename';
 import pqueue from 'p-queue';
+import { promisify } from 'node:util';
+import { exec as baseExec } from 'node:child_process';
 
 async function writeJsonData(data: any, filePath: string) {
   data.meta.lastUpdated = Date.now();
@@ -65,4 +67,18 @@ function downloadJacket(coverUrl: string, localFilename?: string) {
   return outputPath;
 }
 
-export { writeJsonData, downloadJacket, requestQueue, setJacketPrefix };
+const promisifiedExec = promisify(baseExec);
+const execAsync = async (command: string) => {
+  const { stderr, stdout } = await promisifiedExec(command);
+  if (stderr) throw new Error(stderr);
+
+  if (stdout) console.log(stdout);
+};
+
+export {
+  writeJsonData,
+  downloadJacket,
+  requestQueue,
+  setJacketPrefix,
+  execAsync,
+};
