@@ -196,11 +196,11 @@ export default async function run() {
       }
 
       outputSongs.push({
-        name: xmlData.MusicData.name.str,
+        name: xmlData.MusicData.name.str.toString(),
         name_translation: translationData.find((n) =>
           n.includes(xmlData.MusicData.name.str),
         ),
-        artist: xmlData.MusicData.artistName.str,
+        artist: xmlData.MusicData.artistName.str.toString(),
         category: xmlData.MusicData.genreNames.list.StringID.str,
         folder: versions[versionNumber as keyof typeof versions] ?? 'Unknown',
         jacket: `chunithm/${xmlData.MusicData.name.id.toString()}.png`,
