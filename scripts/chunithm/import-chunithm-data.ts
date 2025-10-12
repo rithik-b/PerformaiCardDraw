@@ -55,6 +55,7 @@ interface OutputChart {
 
 interface OutputSong {
   name: string;
+  name_translation: string | undefined;
   artist: string;
   category: string;
   folder: string;
@@ -68,7 +69,13 @@ const getVersionNumber = (releaseTag: string): number => {
   return parseInt(match[1].replace('.', ''), 10);
 };
 
+const translationUrl =
+  'https://raw.githubusercontent.com/lomotos10/GCM-bot/refs/heads/main/data/aliases/en/chuni.tsv';
+
 export default async function run() {
+  const translationData = await fetch(translationUrl).then((res) =>
+    res.text().then((t) => t.split('\n')),
+  );
   const outputSongs: OutputSong[] = [];
 
   for (const opt of await readdir(basePath)) {
@@ -190,6 +197,9 @@ export default async function run() {
 
       outputSongs.push({
         name: xmlData.MusicData.name.str,
+        name_translation: translationData.find((n) =>
+          n.includes(xmlData.MusicData.name.str),
+        ),
         artist: xmlData.MusicData.artistName.str,
         category: xmlData.MusicData.genreNames.list.StringID.str,
         folder: versions[versionNumber as keyof typeof versions] ?? 'Unknown',
