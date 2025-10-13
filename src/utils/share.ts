@@ -17,7 +17,7 @@ interface Download {
 
 type ShareMethod = NativeShare | Clipboard | Download;
 
-export async function shareImage(dataUrl: string, filename: string) {
+export async function shareImage(dataUrl: string) {
   const blob = await dataUriToBlob(dataUrl);
   const mimeType = blob.type;
 
