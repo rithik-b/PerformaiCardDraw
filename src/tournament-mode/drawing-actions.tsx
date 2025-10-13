@@ -17,7 +17,7 @@ import { firstOf } from '../utils';
 import { useConfigState } from '../config-state';
 import { useErrorBoundary } from 'react-error-boundary';
 
-const DEFAULT_FILENAME = 'card-draw.png';
+// const DEFAULT_FILENAME = 'card-draw.png';
 
 export function DrawingActions() {
   const getDrawing = useDrawing((s) => s.serializeSyncFields);
