@@ -95,6 +95,8 @@ export function SongCard(props: Props) {
     jacket,
   } = replacedWith || chart;
 
+  const defaultLocked = (replacedWith || chart)?.defaultLocked;
+
   const hasLabel = !!(vetoedBy || protectedBy || replacedBy);
 
   let jacketBg = {};
@@ -210,6 +212,8 @@ export function SongCard(props: Props) {
                 ? 'ST'
                 : 'DX'
               : null}
+            {defaultLocked ? '🔒' : null}
+            {chart.defaultLocked}
           </div>
 
           <div className={styles.difficulty}>

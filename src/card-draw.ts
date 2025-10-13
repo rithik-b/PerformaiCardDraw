@@ -153,6 +153,7 @@ export function getDrawnChart(
     // Fill in variant data per game
     diffAbbr: getDiffAbbr(gameData, chart.diffClass),
     diffColor: getDifficultyColor(gameData, chart.diffClass),
+    defaultLocked: currentSong.defaultLocked,
   };
 }
 

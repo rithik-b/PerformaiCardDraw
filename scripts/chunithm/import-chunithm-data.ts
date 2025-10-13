@@ -60,6 +60,7 @@ interface OutputSong {
   category: string;
   folder: string;
   jacket: string;
+  defaultLocked: boolean;
   charts: OutputChart[];
 }
 
@@ -155,6 +156,8 @@ export default async function run() {
         await fs.readFile(xmlPath, 'utf-8'),
       ) as MusicData;
 
+      if (xmlData.MusicData.disableFlag) continue;
+
       const convertJacket = async (file: string) => {
         const inputFilePath = path.join(fullPath, file);
         const outputFilePath = path.join(
@@ -195,6 +198,8 @@ export default async function run() {
         );
       }
 
+      if (charts.length === 0) continue;
+
       outputSongs.push({
         name: xmlData.MusicData.name.str.toString(),
         name_translation: translationData.find((n) =>
@@ -205,6 +210,7 @@ export default async function run() {
         folder: versions[versionNumber as keyof typeof versions] ?? 'Unknown',
         jacket: `chunithm/${xmlData.MusicData.name.id.toString()}.png`,
         charts,
+        defaultLocked: xmlData.MusicData.firstLock,
       });
     }
   }

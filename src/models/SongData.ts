@@ -93,6 +93,7 @@ export interface Song {
   jacket: string;
   folder?: string;
   remyLink?: string;
+  defaultLocked?: boolean;
 }
 export interface Chart {
   flags?: UniqueStringArr2;

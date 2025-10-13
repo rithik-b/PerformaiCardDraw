@@ -15,6 +15,7 @@ export interface EligibleChart {
   drawGroup?: number;
   flags: string[];
   song: Song;
+  defaultLocked?: boolean;
 }
 
 export interface DrawnChart extends EligibleChart {
