@@ -18,14 +18,23 @@ interface Download {
 type ShareMethod = NativeShare | Clipboard | Download;
 
 export async function shareImage(dataUrl: string, filename: string) {
-  shareData(dataUrl, {
-    filename,
-    methods: [
-      { type: 'nativeShare' },
-      { type: 'clipboard', toastMessage: 'Image copied to clipboard' },
-      { type: 'download' },
-    ],
+  const blob = await dataUriToBlob(dataUrl);
+  const mimeType = blob.type;
+
+  // Create a new ClipboardItem with the image Blob
+  const clipboardItem = new ClipboardItem({
+    [mimeType]: blob,
   });
+
+  // Write the ClipboardItem to the clipboard
+  await navigator.clipboard.write([clipboardItem]);
+  toaster.show(
+    {
+      message: 'Image copied to clipboard',
+      icon: 'paperclip',
+    },
+    'copied-data',
+  );
 }
 
 export async function shareData(
@@ -125,15 +134,26 @@ export function copyToClipboard(blob: Blob) {
 }
 
 function dataUriToBlob(dataUri: string) {
-  const headerIndex = dataUri.indexOf(',');
-  const header = dataUri.slice(0, headerIndex);
-  const body = dataUri.slice(headerIndex + 1);
-  const match = header.match(/data:(.+)(;base64)?$/);
-  if (!match) {
-    throw new Error('data uri is not well-formed');
+  // A base64 string for an image is typically formatted as:
+  // data:<MIME-TYPE>;base64,<DATA>
+  const parts = dataUri.split(';base64,');
+  if (parts.length !== 2) {
+    throw new Error('Invalid Base64 string format.');
   }
-  const type = match[1] ?? undefined;
-  const isBase64 = !!match[2];
-  const decoded = isBase64 ? atob(body) : decodeURI(body);
-  return new Blob([decoded], { type });
+
+  const mimeType = parts[0].split(':')[1];
+  const base64Data = parts[1];
+
+  // Convert the base64 string to a binary string
+  const binaryString = atob(base64Data);
+
+  // Create an ArrayBuffer to hold the binary data
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  // Create and return the Blob
+  return new Blob([bytes], { type: mimeType });
 }

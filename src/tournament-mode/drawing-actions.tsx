@@ -90,7 +90,7 @@ export function DrawingActions() {
             <Tooltip content="Connect to a peer to share">{button}</Tooltip>
           )
         ) : null}
-        <Tooltip content="Save Image">
+        <Tooltip content="Copy Image to clipboard">
           <Button
             minimal
             icon={IconNames.Camera}
