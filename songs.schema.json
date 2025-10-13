@@ -11,7 +11,13 @@
     "meta": {
       "type": "object",
       "description": "Describes unique configuration options for this game",
-      "required": ["lastUpdated", "difficulties", "categories", "lvlMax", "flags"],
+      "required": [
+        "lastUpdated",
+        "difficulties",
+        "categories",
+        "lvlMax",
+        "flags"
+      ],
       "additionalProperties": false,
       "properties": {
         "menuParent": {
@@ -113,6 +119,9 @@
           "name_translation": {
             "type": "string"
           },
+          "defaultLocked": {
+            "type": "boolean"
+          },
           "search_hint": {
             "type": "string"
           },
@@ -187,19 +196,13 @@
       "description": "Dictionary of localized strings",
       "required": ["name", "$abbr"],
       "additionalProperties": {
-        "oneOf": [
-          { "type": "string" },
-          { "$ref": "#/$defs/i18nDictBranch" }
-        ]
+        "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/i18nDictBranch" }]
       }
     },
     "i18nDictBranch": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [
-          { "type": "string" },
-          { "$ref": "#/$defs/i18nDictBranch" }
-        ]
+        "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/i18nDictBranch" }]
       }
     }
   }

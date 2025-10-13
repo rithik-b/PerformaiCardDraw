@@ -88,12 +88,12 @@ export interface Song {
   category: string;
   bpm?: string;
   name_translation?: string;
+  defaultLocked?: boolean;
   search_hint?: string;
   charts: Chart[];
   jacket: string;
   folder?: string;
   remyLink?: string;
-  defaultLocked?: boolean;
 }
 export interface Chart {
   flags?: UniqueStringArr2;
