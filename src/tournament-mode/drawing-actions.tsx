@@ -104,7 +104,6 @@ export function DrawingActions() {
                   await domToPng(drawingElement, {
                     scale: 2,
                   }),
-                  DEFAULT_FILENAME,
                 );
               }
             }}
