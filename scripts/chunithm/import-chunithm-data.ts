@@ -12,7 +12,7 @@ const basePath = './.data/chunithm';
 const xmlParser = new XMLParser();
 
 const outputImagesDir = './src/assets/jackets/chunithm';
-const OUTFILE = 'src/songs/chunithm_luminous_plus.json';
+const OUTFILE = 'src/songs/chunithm_verse.json';
 
 const versions = {
   100: 'CHUNITHM',
