@@ -15,7 +15,7 @@ import { ThemeSyncWidget } from './theme-toggle';
 
 export function App() {
   return (
-    <DrawStateManager defaultDataSet="chunithm_luminous_plus">
+    <DrawStateManager defaultDataSet="chunithm_verse">
       <ThemeSyncWidget />
       <UpdateManager />
       <Header />
