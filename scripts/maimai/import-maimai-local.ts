@@ -39,6 +39,7 @@ interface MusicData {
   genreName: NameRef;
   AddVersion: NameRef;
   bpm: string;
+  lockType: string;
   disable: string;
   utageKanjiName: string;
   notesData: { Notes: Notes[] };
@@ -166,6 +167,9 @@ export function songFromXml(
     charts.push(chart);
   });
   if (!charts.length) return;
+  const lockType = Number(music.lockType);
+  if (!Number.isInteger(lockType) || lockType < 0)
+    throw new Error(`Invalid lockType for music ${id}: ${music.lockType}`);
   return {
     id: String(id),
     name: music.name.str,
@@ -175,6 +179,9 @@ export function songFromXml(
       .replace(/^maimaDX/, 'maimaiでらっくす')
       .replace(/PLUS$/, ' PLUS'),
     bpm: music.bpm,
+    // Main-song unlock requirement, not subLockType (which gates extra charts).
+    // This is the game's default state, not a player's personal unlock status.
+    defaultLocked: lockType !== 0,
     jacket: `${JACKET_FOLDER}/${id}.png`,
     charts,
   };

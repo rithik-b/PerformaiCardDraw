@@ -119,12 +119,16 @@ test('local XML tables resolve arbitrary genre IDs, overlays and displayed plus 
     mkdirSync(path.dirname(target), { recursive: true });
     writeFileSync(target, text);
   };
-  const musicXml = (name: string, genreId = '999') => `<MusicData>
+  const musicXml = (
+    name: string,
+    genreId = '999',
+    lockType = '0',
+  ) => `<MusicData>
     <name><id>10008</id><str>${name}</str></name>
     <artistName><id>1</id><str>Local artist</str></artistName>
     <genreName><id>${genreId}</id><str>Unlisted future genre</str></genreName>
     <AddVersion><id>24</id><str>PRiSMPLUS</str></AddVersion>
-    <bpm>180</bpm><disable>false</disable><utageKanjiName />
+    <bpm>180</bpm><lockType>${lockType}</lockType><subLockType>1</subLockType><disable>false</disable><utageKanjiName />
     <notesData><Notes><file><path>not-needed.ma2</path></file><level>12</level><levelDecimal>6</levelDecimal>
     <musicLevelID>18</musicLevelID><isEnable>true</isEnable><notesDesigner><id>1</id><str>Designer</str></notesDesigner></Notes>
     <Notes><isEnable>false</isEnable></Notes></notesData></MusicData>`;
@@ -157,6 +161,33 @@ test('local XML tables resolve arbitrary genre IDs, overlays and displayed plus 
     assert.equal(local.songs[0].charts[0].author, 'Designer');
     assert.deepEqual(local.songs[0].charts[0].flags, ['dx']);
     assert.equal(local.songs[0].charts.length, 1);
+    assert.equal(
+      local.songs[0].defaultLocked,
+      false,
+      'extra-chart locks do not lock the whole song',
+    );
+    for (const lockType of ['1', '2', '3', '4']) {
+      write(
+        'A001/music/10008/Music.xml',
+        musicXml('Updated name', '999', lockType),
+      );
+      const lockedSong = extractCatalog(layers).songs[0];
+      assert.equal(lockedSong.defaultLocked, true);
+      assert.equal(
+        mergeSongs([{ ...song(10008), defaultLocked: false }], [lockedSong])
+          .songs[0].defaultLocked,
+        true,
+      );
+    }
+    write('A001/music/10008/Music.xml', musicXml('Updated name'));
+    assert.equal(
+      mergeSongs(
+        [{ ...song(10008), defaultLocked: true }],
+        extractCatalog(layers).songs,
+      ).songs[0].defaultLocked,
+      false,
+      'later unlocks clear stale lock indicators',
+    );
     write(
       'A001/musicGenre/999/MusicGenre.xml',
       '<MusicGenreData><name><id>999</id><str>Internal name</str></name><genreName>Renamed genre</genreName></MusicGenreData>',
