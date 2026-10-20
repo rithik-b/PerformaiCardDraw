@@ -12,7 +12,7 @@ const basePath = './.data/chunithm';
 const xmlParser = new XMLParser();
 
 const outputImagesDir = './src/assets/jackets/chunithm';
-const OUTFILE = 'src/songs/chunithm_verse.json';
+const OUTFILE = 'src/songs/chunithm_xversex.json';
 
 const versions = {
   100: 'CHUNITHM',
@@ -35,6 +35,7 @@ const versions = {
   225: 'LUMINOUS PLUS',
   230: 'VERSE',
   235: 'X-VERSE',
+  245: 'X-VERSE-X',
 };
 
 const difficulties = [
